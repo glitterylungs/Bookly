@@ -1,0 +1,30 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="115dp"
+    android:height="154dp"
+    android:viewportWidth="115"
+    android:viewportHeight="154">
+    <path
+        android:fillColor="#16A085"
+        android:pathData="M0,44.71V57.48V63.87V83.03V89.41V121.35V127.73C0,134.76 5.72,140.51 12.77,140.51H102.19C109.24,140.51 114.96,134.76 114.96,127.73V121.35V89.41V63.87V44.71H0Z" />
+    <path
+        android:fillColor="#ECF0F1"
+        android:pathData="M0,38.32V51.09V57.48V76.64V83.03V114.96V121.35C0,128.37 5.72,134.12 12.77,134.12H102.19C109.24,134.12 114.96,128.37 114.96,121.35V114.96V83.03V57.48V38.32H0Z" />
+    <path
+        android:fillColor="#BDC3C7"
+        android:pathData="M0,31.93V44.71V51.09V70.25V76.64V108.57V114.96C0,121.99 5.72,127.73 12.77,127.73H102.19C109.24,127.73 114.96,121.99 114.96,114.96V108.57V76.64V51.09V31.93H0Z" />
+    <path
+        android:fillColor="#ECF0F1"
+        android:pathData="M0,25.55V38.32V44.71V63.87V70.25V102.19V108.57C0,115.6 5.72,121.35 12.77,121.35H102.19C109.24,121.35 114.96,115.6 114.96,108.57V102.19V70.25V44.71V25.55H0Z" />
+    <path
+        android:fillColor="#16A085"
+        android:pathData="M12.77,0C5.72,0 0,5.75 0,12.77V19.16V44.71V57.48V63.87V83.03V89.41V121.35V127.73C0,134.76 5.72,140.51 12.77,140.51H25.55V134.12H15.97C10.68,134.12 6.39,129.65 6.39,124.54C6.39,118.79 10.68,114.96 15.97,114.96H95.8H102.19C109.24,114.96 114.96,109.21 114.96,102.19V95.8V63.87V38.32V19.16V12.77C114.96,5.75 109.24,0 102.19,0H76.64H12.77Z" />
+    <path
+        android:fillColor="#1ABC9C"
+        android:pathData="M31.93,0V114.96H38.32H95.8H102.19C109.24,114.96 114.96,109.21 114.96,102.19V95.8V63.87V38.32V19.16V12.77C114.96,5.75 109.24,0 102.19,0H76.64H38.32H31.93Z" />
+    <path
+        android:fillColor="#E74C3C"
+        android:pathData="M25.55,127.73V140.51V153.28L41.51,140.51L57.48,153.28V140.51V127.73H25.55Z" />
+    <path
+        android:fillColor="#C0392B"
+        android:pathData="M25.55,121.35H57.48V127.73H25.55V121.35Z" />
+</vector>

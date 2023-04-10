@@ -64,12 +64,6 @@ internal fun Login(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Bookly",
-                modifier = Modifier.padding(bottom = 50.dp),
-                style = MaterialTheme.typography.displayMedium
-            )
-
-            Text(
                 text = "Sign In",
                 modifier = Modifier.padding(bottom = 40.dp),
                 style = MaterialTheme.typography.headlineMedium
