@@ -21,16 +21,21 @@ internal class LoginViewModel(
     var isLoginSuccessful: MutableState<Boolean> = mutableStateOf(false)
         private set
 
-    private fun login() {
-        viewModelScope.launch(Dispatchers.IO) {
-            authenticationRepository.signIn(email.value, password.value)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        isLoginSuccessful.value = true
-                    } else {
-                        errorMessage.value = task.exception.toString()
+    fun login() {
+        if (email.value.isNotEmpty() && password.value.isNotEmpty()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                authenticationRepository.signIn(email.value, password.value)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            isLoginSuccessful.value = true
+                        } else {
+                            errorMessage.value = task.exception?.message
+                            println(task.exception.toString())
+                        }
                     }
-                }
+            }
+        } else {
+            errorMessage.value = "Please fill in all of the required fields"
         }
     }
 }
