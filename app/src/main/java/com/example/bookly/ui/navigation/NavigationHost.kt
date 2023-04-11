@@ -15,14 +15,20 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 @Composable
 internal fun NavigationHost(
     navController: NavHostController = rememberAnimatedNavController(),
-    startDestination: String = NavigationRoutes.Launch.route
+    startDestination: String = NavigationRoutes.Launch.route,
+    isLoggedIn: Boolean,
 ) {
     AnimatedNavHost(navController = navController, startDestination = startDestination) {
 
         composable(
             route = NavigationRoutes.Launch.route
         ) {
-            Launch()
+            Launch(
+                navigateToNextScreen = {
+                    if (isLoggedIn) navController.navigate(NavigationRoutes.BookList.route)
+                    else navController.navigate(NavigationRoutes.Login.route)
+                }
+            )
         }
 
         composable(

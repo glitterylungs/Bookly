@@ -10,8 +10,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.bookly.ui.navigation.NavigationHost
 import com.example.bookly.ui.theme.BooklyTheme
+import org.koin.android.ext.android.inject
 
 internal class MainActivity : ComponentActivity() {
+
+    private val viewModel by inject<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +25,9 @@ internal class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationHost()
+                    NavigationHost(
+                        isLoggedIn = viewModel.isLoggedIn.value
+                    )
                 }
             }
         }

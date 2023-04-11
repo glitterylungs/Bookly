@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import org.koin.dsl.module
 
 internal val repositoryModule = module {
+
     single<AuthenticationRepository> {
         AuthenticationRepositoryImpl(
             auth = FirebaseAuth.getInstance()
