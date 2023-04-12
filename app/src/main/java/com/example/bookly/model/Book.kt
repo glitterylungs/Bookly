@@ -1,9 +1,8 @@
 package com.example.bookly.model
 
 internal data class Book(
-    //pytanie czy trzeba id
-    val title: String,
-    val author: String,
-    val genre: String,
-    val year: Int
+    val title: String? = null,
+    val author: String? = null,
+    val genre: String? = null,
+    val year: Int? = null
 )

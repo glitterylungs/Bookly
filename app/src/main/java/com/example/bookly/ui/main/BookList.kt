@@ -22,7 +22,7 @@ internal fun BookList(
 ) {
     var tabIndex by remember { mutableStateOf(0) }
 
-    val tabs = listOf("To read", "Already read")
+    val tabs = listOf("All", "To read", "Already read")
     Scaffold(
         topBar = {
         }
@@ -37,8 +37,9 @@ internal fun BookList(
                 }
             }
             when (tabIndex) {
-                0 -> ToRead(viewModel)
-                1 -> AlreadyRead()
+                0 -> All(viewModel)
+                1 -> ToRead(viewModel)
+                2 -> AlreadyRead()
             }
         }
     }

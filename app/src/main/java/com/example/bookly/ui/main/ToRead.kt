@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -38,6 +39,10 @@ internal fun ToRead(
     var genre by remember { viewModel.genre }
     var year by remember { viewModel.year }
     val isDialogVisible by remember { viewModel.isDialogVisible }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getBooksToRead()
+    }
 
     if (isDialogVisible) AddBookDialog(
         title = title,
