@@ -91,6 +91,5 @@ fun BooklyTheme(
         colorScheme = colors,
         content = content,
         typography = replyTypography,
-        shapes = replyShapes
     )
 }
