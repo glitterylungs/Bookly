@@ -42,6 +42,7 @@ internal fun ToRead(
 
     LaunchedEffect(key1 = true) {
         viewModel.getBooksToRead()
+        viewModel.getBooks()
     }
 
     if (isDialogVisible) AddBookDialog(

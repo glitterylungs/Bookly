@@ -30,7 +30,8 @@ internal val viewModelModule = module {
     viewModel {
         BookListViewModel(
             authenticationRepository = get(),
-            realtimeDatabaseRepository = get()
+            realtimeDatabaseRepository = get(),
+            bookRepository = get()
         )
     }
 }

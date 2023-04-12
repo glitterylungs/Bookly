@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookly.model.Book
 import com.example.bookly.repository.AuthenticationRepository
+import com.example.bookly.repository.BookRepository
 import com.example.bookly.repository.RealtimeDatabaseRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 internal class BookListViewModel(
     private val authenticationRepository: AuthenticationRepository,
     private val realtimeDatabaseRepository: RealtimeDatabaseRepository,
+    private val bookRepository: BookRepository,
 ) : ViewModel() {
 
     var title: MutableState<String> = mutableStateOf("")
@@ -34,6 +36,14 @@ internal class BookListViewModel(
 
     fun changeIsDialogVisible(isVisible: Boolean) {
         isDialogVisible.value = isVisible
+    }
+
+    fun getBooks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            println(
+                bookRepository.getBooksByQuery("flowers")
+            )
+        }
     }
 
     fun addBookToRead() {
