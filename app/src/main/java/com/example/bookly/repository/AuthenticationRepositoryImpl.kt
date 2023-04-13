@@ -8,6 +8,8 @@ internal class AuthenticationRepositoryImpl(
     private val auth: FirebaseAuth,
 ) : AuthenticationRepository {
 
+    override fun getUserUid() = auth.currentUser?.uid
+
     override fun checkIfSignedIn() = auth.currentUser != null
 
     override fun signUp(email: String, password: String): Task<AuthResult> =

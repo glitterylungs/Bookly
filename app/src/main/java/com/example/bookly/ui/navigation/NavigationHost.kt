@@ -3,9 +3,12 @@ package com.example.bookly.ui.navigation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.bookly.ui.authentication.Login
 import com.example.bookly.ui.authentication.Registration
 import com.example.bookly.ui.launch.Launch
+import com.example.bookly.ui.main.BookDetails
 import com.example.bookly.ui.main.BookList
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -51,7 +54,22 @@ internal fun NavigationHost(
         composable(
             route = NavigationRoutes.BookList.route
         ) {
-            BookList()
+            BookList {
+                navController.navigate("${NavigationRoutes.BookDetails.route}/bookId=${it}")
+            }
+        }
+
+        composable(
+            route = "${NavigationRoutes.BookDetails.route}/bookId={bookId}",
+            arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+        ) {
+            val id = requireNotNull(it.arguments).getString("bookId")
+            if (id != null) {
+                BookDetails(
+                    bookId = id,
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

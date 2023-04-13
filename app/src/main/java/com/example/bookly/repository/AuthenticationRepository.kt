@@ -7,6 +7,8 @@ internal interface AuthenticationRepository {
 
     fun checkIfSignedIn(): Boolean
 
+    fun getUserUid(): String?
+
     fun signUp(email: String, password: String): Task<AuthResult>
 
     fun signIn(email: String, password: String): Task<AuthResult>

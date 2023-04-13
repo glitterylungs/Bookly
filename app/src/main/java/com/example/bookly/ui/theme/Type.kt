@@ -19,4 +19,19 @@ val replyTypography = Typography(
         fontSize = 28.sp,
         lineHeight = 36.sp,
     ),
+    titleLarge = TextStyle(
+        fontFamily = FontFamily(Font(R.font.montserrat_medium)),
+        fontSize = 22.sp,
+        lineHeight = 28.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = FontFamily(Font(R.font.montserrat_medium)),
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = FontFamily(Font(R.font.montserrat_regular)),
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    )
 )
