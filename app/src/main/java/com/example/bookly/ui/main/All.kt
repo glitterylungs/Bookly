@@ -1,9 +1,12 @@
 package com.example.bookly.ui.main
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -12,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import com.example.bookly.ui.common.BookCard
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun All(
     viewModel: BookListViewModel,
@@ -19,17 +23,21 @@ internal fun All(
 ) {
     val allBooks by remember { viewModel.allBooks }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.getBooks("search")
+    LaunchedEffect(true) {
+        viewModel.getBooks("harry potter")
     }
-
-    LazyColumn(
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 20.dp, start = 10.dp, end = 10.dp)
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalItemSpacing = 16.dp
     ) {
         items(allBooks) { item ->
-            BookCard(book = item, onClick = navigateToBookDetails)
+            if (item.volumeInfo?.imageLinks?.thumbnail != null) {
+                BookCard(book = item, onClick = navigateToBookDetails)
+            }
         }
     }
 }

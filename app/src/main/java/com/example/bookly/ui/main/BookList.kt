@@ -3,7 +3,7 @@ package com.example.bookly.ui.main
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.AbsoluteCutCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -14,16 +14,20 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun BookList(
     viewModel: BookListViewModel = koinViewModel(),
@@ -34,7 +38,15 @@ internal fun BookList(
     val booksToReadSearchText by remember { viewModel.booksToReadSearchText }
     val booksAlreadyReadSearchText by remember { viewModel.booksAlreadyReadSearchText }
 
-    val tabs = listOf("All", "To read", "Already read")
+    var isFocused by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val tabs = listOf("ALL BOOKS", "TO READ", "ALREADY READ")
+
+    if (!isFocused) {
+        LaunchedEffect(keyboardController) {
+            keyboardController?.hide()
+        }
+    }
 
     Scaffold {
         Column(modifier = Modifier.padding(it)) {
@@ -56,7 +68,9 @@ internal fun BookList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 12.dp, horizontal = 20.dp)
-                    .shadow(3.dp, shape = AbsoluteCutCornerShape(7.dp)),
+                    .shadow(3.dp, shape = CircleShape)
+                    .onFocusChanged { isFocused = it.isFocused },
+                label = { Text(text = "Search") },
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
@@ -75,8 +89,8 @@ internal fun BookList(
             }
             when (tabIndex) {
                 0 -> All(viewModel, navigateToBookDetails)
-                1 -> ToRead(viewModel)
-                2 -> AlreadyRead()
+                1 -> ToRead(viewModel, navigateToBookDetails)
+                2 -> AlreadyRead(viewModel, navigateToBookDetails)
             }
         }
     }

@@ -22,23 +22,24 @@ internal class RealtimeDatabaseRepositoryImpl(
         callback: (List<Item>) -> Unit,
         errorCallback: (DatabaseError) -> Unit
     ) {
-        database.reference.child("users").child(userId).child("toRead").addValueEventListener(
-            object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val books: MutableList<Item> = mutableListOf()
-                    snapshot.children.forEach {
-                        it.getValue(Item::class.java)?.let { book ->
-                            books.add(book)
+        database.reference.child("users").child(userId).child("toRead")
+            .addValueEventListener(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val books: MutableList<Item> = mutableListOf()
+                        snapshot.children.forEach {
+                            it.getValue(Item::class.java)?.let { book ->
+                                books.add(book)
+                            }
                         }
+                        callback(books)
                     }
-                    callback(books)
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    errorCallback(error)
+                    override fun onCancelled(error: DatabaseError) {
+                        errorCallback(error)
+                    }
                 }
-            }
-        )
+            )
     }
 
     override fun getBooksToReadByQuery(

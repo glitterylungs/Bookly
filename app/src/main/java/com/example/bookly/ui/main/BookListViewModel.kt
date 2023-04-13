@@ -17,11 +17,6 @@ internal class BookListViewModel(
     private val bookRepository: BookRepository,
 ) : ViewModel() {
 
-    var title: MutableState<String> = mutableStateOf("")
-    var author: MutableState<String> = mutableStateOf("")
-    var genre: MutableState<String> = mutableStateOf("")
-    var year: MutableState<String> = mutableStateOf("")
-
     var allBooks: MutableState<List<Item>> = mutableStateOf(emptyList())
         private set
 
@@ -36,12 +31,6 @@ internal class BookListViewModel(
         private set
 
     var booksAlreadyReadSearchText: MutableState<String> = mutableStateOf("")
-
-    var isDialogVisible: MutableState<Boolean> = mutableStateOf(false)
-        private set
-
-    var isSuccessful: MutableState<Boolean> = mutableStateOf(false)
-        private set
 
     var errorMessage: MutableState<String?> = mutableStateOf(null)
         private set
@@ -62,17 +51,15 @@ internal class BookListViewModel(
         getBooksAlreadyReadByQuery(text)
     }
 
-    fun changeIsDialogVisible(isVisible: Boolean) {
-        isDialogVisible.value = isVisible
-    }
-
     fun getBooks(query: String) {
-        if (query != "") {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (query != "") {
                 allBooks.value =
-                    (bookRepository.getBooksByQuery(query).items?.filterNotNull() ?: println(
-                        bookRepository.getBooksByQuery(query)
-                    )) as List<Item>
+                    bookRepository.getBooksByQuery(query).items?.filterNotNull() ?: emptyList()
+            } else {
+                allBooks.value =
+                    bookRepository.getBooksByQuery("harry potter").items?.filterNotNull()
+                        ?: emptyList()
             }
         }
     }
