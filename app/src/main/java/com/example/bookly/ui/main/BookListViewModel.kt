@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bookly.model.Book
+import com.example.bookly.api.model.Item
 import com.example.bookly.repository.AuthenticationRepository
 import com.example.bookly.repository.BookRepository
 import com.example.bookly.repository.RealtimeDatabaseRepository
@@ -22,8 +22,20 @@ internal class BookListViewModel(
     var genre: MutableState<String> = mutableStateOf("")
     var year: MutableState<String> = mutableStateOf("")
 
-    var books: MutableState<List<Book>> = mutableStateOf(emptyList())
+    var allBooks: MutableState<List<Item>> = mutableStateOf(emptyList())
         private set
+
+    var searchText: MutableState<String> = mutableStateOf("")
+
+    var booksToRead: MutableState<List<Item>> = mutableStateOf(emptyList())
+        private set
+
+    var booksToReadSearchText: MutableState<String> = mutableStateOf("")
+
+    var booksAlreadyRead: MutableState<List<Item>> = mutableStateOf(emptyList())
+        private set
+
+    var booksAlreadyReadSearchText: MutableState<String> = mutableStateOf("")
 
     var isDialogVisible: MutableState<Boolean> = mutableStateOf(false)
         private set
@@ -34,51 +46,96 @@ internal class BookListViewModel(
     var errorMessage: MutableState<String?> = mutableStateOf(null)
         private set
 
+
+    fun onSearchTextChange(text: String) {
+        searchText.value = text
+        getBooks(text)
+    }
+
+    fun onBooksToReadSearchTextChange(text: String) {
+        booksToReadSearchText.value = text
+        getBooksToReadByQuery(text)
+    }
+
+    fun onBooksAlreadyReadSearchTextChange(text: String) {
+        booksAlreadyReadSearchText.value = text
+        getBooksAlreadyReadByQuery(text)
+    }
+
     fun changeIsDialogVisible(isVisible: Boolean) {
         isDialogVisible.value = isVisible
     }
 
-    fun getBooks() {
-        viewModelScope.launch(Dispatchers.IO) {
-            println(
-                bookRepository.getBooksByQuery("flowers")
-            )
-        }
-    }
-
-    fun addBookToRead() {
-        val book = Book(
-            title = title.value,
-            author = author.value,
-            genre = genre.value,
-            year = year.value.toInt()
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            authenticationRepository.getUserUid()?.let {
-                realtimeDatabaseRepository.addBookToRead(it, book)
-                    .addOnSuccessListener {
-                        isSuccessful.value = true
-                    }
-                    .addOnFailureListener { exception ->
-                        errorMessage.value = exception.message
-                        println(exception.message)
-                    }
-            } ?: run { errorMessage.value = "No such user" }
-
+    fun getBooks(query: String) {
+        if (query != "") {
+            viewModelScope.launch(Dispatchers.IO) {
+                allBooks.value =
+                    (bookRepository.getBooksByQuery(query).items?.filterNotNull() ?: println(
+                        bookRepository.getBooksByQuery(query)
+                    )) as List<Item>
+            }
         }
     }
 
     fun getBooksToRead() {
-        authenticationRepository.getUserUid()?.let {
-            realtimeDatabaseRepository.getBooksToRead(
-                userId = it,
-                callback = {
-                    books.value = it
-                    println(books.value)
-                },
-                errorCallback = { errorMessage.value = it.message }
-            )
+        viewModelScope.launch(Dispatchers.IO) {
+            authenticationRepository.getUserUid()?.let {
+                realtimeDatabaseRepository.getBooksToRead(
+                    userId = it,
+                    callback = {
+                        booksToRead.value = it
+                        println(booksToRead.value)
+                    },
+                    errorCallback = { errorMessage.value = it.message }
+                )
+            }
+        }
+    }
+
+    fun getBooksToReadByQuery(query: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            authenticationRepository.getUserUid()?.let {
+                realtimeDatabaseRepository.getBooksToReadByQuery(
+                    userId = it,
+                    query = query,
+                    callback = {
+                        booksToRead.value = it
+                        println(booksToRead.value)
+                    },
+                    errorCallback = { errorMessage.value = it.message }
+                )
+            }
+        }
+    }
+
+    fun getBooksAlreadyRead() {
+        viewModelScope.launch(Dispatchers.IO) {
+            authenticationRepository.getUserUid()?.let {
+                realtimeDatabaseRepository.getBooksAlreadyRead(
+                    userId = it,
+                    callback = {
+                        booksAlreadyRead.value = it
+                        println(booksAlreadyRead.value)
+                    },
+                    errorCallback = { errorMessage.value = it.message }
+                )
+            }
+        }
+    }
+
+    fun getBooksAlreadyReadByQuery(query: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            authenticationRepository.getUserUid()?.let {
+                realtimeDatabaseRepository.getBooksAlreadyReadByQuery(
+                    userId = it,
+                    query = query,
+                    callback = {
+                        booksAlreadyRead.value = it
+                        println(booksAlreadyRead.value)
+                    },
+                    errorCallback = { errorMessage.value = it.message }
+                )
+            }
         }
     }
 }

@@ -42,7 +42,6 @@ internal fun ToRead(
 
     LaunchedEffect(key1 = true) {
         viewModel.getBooksToRead()
-        viewModel.getBooks()
     }
 
     if (isDialogVisible) AddBookDialog(
@@ -56,7 +55,6 @@ internal fun ToRead(
         onYearChange = { year = it },
         onDismiss = { viewModel.changeIsDialogVisible(false) },
         onSave = {
-            viewModel.addBookToRead()
             viewModel.changeIsDialogVisible(false)
         }
     )
