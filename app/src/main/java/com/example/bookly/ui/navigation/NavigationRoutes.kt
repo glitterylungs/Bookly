@@ -6,4 +6,5 @@ internal sealed class NavigationRoutes(val route: String) {
     object Registration : NavigationRoutes("registration")
     object BookList : NavigationRoutes("bookList")
     object BookDetails : NavigationRoutes("bookDetails")
+    object Settings : NavigationRoutes("settings")
 }

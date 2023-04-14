@@ -1,5 +1,6 @@
 package com.example.bookly.repository
 
+import com.example.bookly.BuildConfig
 import com.example.bookly.api.model.Books
 import com.example.bookly.api.model.Item
 import com.example.bookly.api.service.BookService
@@ -12,7 +13,7 @@ internal class BookRepositoryImpl(
         bookService.getBooksByQuery(
             query,
             20,
-            "AIzaSyBl6d0nkqnAHc1CQ5fBSJNUjLNPcFDas5o"
+            BuildConfig.API_KEY
         )
 
     override suspend fun getBookById(id: String): Item =

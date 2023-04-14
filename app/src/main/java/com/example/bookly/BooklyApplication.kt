@@ -1,6 +1,7 @@
 package com.example.bookly
 
 import android.app.Application
+import com.example.bookly.di.managerModule
 import com.example.bookly.di.networkModule
 import com.example.bookly.di.repositoryModule
 import com.example.bookly.di.viewModelModule
@@ -20,6 +21,7 @@ class BooklyApplication : Application() {
                 repositoryModule,
                 viewModelModule,
                 networkModule,
+                managerModule
             )
         }
     }

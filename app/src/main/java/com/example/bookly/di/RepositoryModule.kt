@@ -1,5 +1,6 @@
 package com.example.bookly.di
 
+import com.example.bookly.BuildConfig
 import com.example.bookly.repository.AuthenticationRepository
 import com.example.bookly.repository.AuthenticationRepositoryImpl
 import com.example.bookly.repository.BookRepository
@@ -20,7 +21,7 @@ internal val repositoryModule = module {
 
     single<RealtimeDatabaseRepository> {
         RealtimeDatabaseRepositoryImpl(
-            database = FirebaseDatabase.getInstance("https://bokly-b1753-default-rtdb.europe-west1.firebasedatabase.app")
+            database = FirebaseDatabase.getInstance(BuildConfig.FIREBASE_DATABASE)
         )
     }
 

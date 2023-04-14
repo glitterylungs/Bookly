@@ -17,4 +17,8 @@ internal class AuthenticationRepositoryImpl(
 
     override fun signIn(email: String, password: String): Task<AuthResult> =
         auth.signInWithEmailAndPassword(email, password)
+
+    override fun signOut() {
+        auth.signOut()
+    }
 }

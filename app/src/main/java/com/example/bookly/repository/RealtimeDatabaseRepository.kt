@@ -10,15 +10,15 @@ internal interface RealtimeDatabaseRepository {
 
     fun deleteBookToRead(userId: String, bookId: String): Task<Void>
 
-    fun getBooksToRead(
+    fun checkIfBookToReadExists(
         userId: String,
-        callback: (List<Item>) -> Unit,
+        bookId: String,
+        callback: (Boolean) -> Unit,
         errorCallback: (DatabaseError) -> Unit
     )
 
-    fun getBooksToReadByQuery(
+    fun getBooksToRead(
         userId: String,
-        query: String,
         callback: (List<Item>) -> Unit,
         errorCallback: (DatabaseError) -> Unit
     )
@@ -27,15 +27,15 @@ internal interface RealtimeDatabaseRepository {
 
     fun deleteBookAlreadyRead(userId: String, bookId: String): Task<Void>
 
-    fun getBooksAlreadyRead(
+    fun checkIfBookAlreadyReadExists(
         userId: String,
-        callback: (List<Item>) -> Unit,
+        bookId: String,
+        callback: (Boolean) -> Unit,
         errorCallback: (DatabaseError) -> Unit
     )
 
-    fun getBooksAlreadyReadByQuery(
+    fun getBooksAlreadyRead(
         userId: String,
-        query: String,
         callback: (List<Item>) -> Unit,
         errorCallback: (DatabaseError) -> Unit
     )

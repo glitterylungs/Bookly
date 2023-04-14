@@ -12,4 +12,6 @@ internal interface AuthenticationRepository {
     fun signUp(email: String, password: String): Task<AuthResult>
 
     fun signIn(email: String, password: String): Task<AuthResult>
+
+    fun signOut()
 }
