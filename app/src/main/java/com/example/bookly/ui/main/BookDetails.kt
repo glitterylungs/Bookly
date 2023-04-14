@@ -165,7 +165,7 @@ internal fun BookDetails(
             Spacer(modifier = Modifier.height(15.dp))
 
             book.volumeInfo?.pageCount?.let {
-                Row() {
+                Row {
                     Text(
                         text = "Pages: ",
                         style = MaterialTheme.typography.labelLarge,

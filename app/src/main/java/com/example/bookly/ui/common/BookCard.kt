@@ -23,7 +23,11 @@ import coil.compose.AsyncImage
 import com.example.bookly.api.model.Item
 
 @Composable
-internal fun BookCard(book: Item, onClick: (String) -> Unit) {
+internal fun BookCard(
+    book: Item,
+    onClick: (String) -> Unit,
+    isLargeViewEnabled: Boolean
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,7 +35,7 @@ internal fun BookCard(book: Item, onClick: (String) -> Unit) {
         shape = RoundedCornerShape(15.dp)
     ) {
         Box(
-            modifier = Modifier.height(250.dp)
+            modifier = Modifier.height(if (isLargeViewEnabled) 550.dp else 250.dp)
         ) {
             AsyncImage(
                 model = book.volumeInfo?.imageLinks?.thumbnail?.replace("http", "https"),

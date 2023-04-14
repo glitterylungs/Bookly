@@ -5,16 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookly.api.model.Item
+import com.example.bookly.manager.SharedPreferencesManager
 import com.example.bookly.repository.AuthenticationRepository
 import com.example.bookly.repository.BookRepository
 import com.example.bookly.repository.RealtimeDatabaseRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 internal class BookListViewModel(
     private val authenticationRepository: AuthenticationRepository,
     private val realtimeDatabaseRepository: RealtimeDatabaseRepository,
     private val bookRepository: BookRepository,
+    private val sharedPreferencesManager: SharedPreferencesManager,
 ) : ViewModel() {
 
     var allBooks: MutableState<List<Item>> = mutableStateOf(emptyList())
@@ -25,30 +28,21 @@ internal class BookListViewModel(
     var booksToRead: MutableState<List<Item>> = mutableStateOf(emptyList())
         private set
 
-    var booksToReadSearchText: MutableState<String> = mutableStateOf("")
-
     var booksAlreadyRead: MutableState<List<Item>> = mutableStateOf(emptyList())
         private set
 
-    var booksAlreadyReadSearchText: MutableState<String> = mutableStateOf("")
+    val isLargeViewEnabled = MutableStateFlow(sharedPreferencesManager.getBoolean("accessibility"))
 
     var errorMessage: MutableState<String?> = mutableStateOf(null)
         private set
 
+    fun updatePreferences() {
+        isLargeViewEnabled.value = sharedPreferencesManager.getBoolean("accessibility")
+    }
 
     fun onSearchTextChange(text: String) {
         searchText.value = text
         getBooks(text)
-    }
-
-    fun onBooksToReadSearchTextChange(text: String) {
-        booksToReadSearchText.value = text
-        getBooksToReadByQuery(text)
-    }
-
-    fun onBooksAlreadyReadSearchTextChange(text: String) {
-        booksAlreadyReadSearchText.value = text
-        getBooksAlreadyReadByQuery(text)
     }
 
     fun getBooks(query: String) {
@@ -79,43 +73,11 @@ internal class BookListViewModel(
         }
     }
 
-    fun getBooksToReadByQuery(query: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            authenticationRepository.getUserUid()?.let {
-                realtimeDatabaseRepository.getBooksToReadByQuery(
-                    userId = it,
-                    query = query,
-                    callback = {
-                        booksToRead.value = it
-                        println(booksToRead.value)
-                    },
-                    errorCallback = { errorMessage.value = it.message }
-                )
-            }
-        }
-    }
-
     fun getBooksAlreadyRead() {
         viewModelScope.launch(Dispatchers.IO) {
             authenticationRepository.getUserUid()?.let {
                 realtimeDatabaseRepository.getBooksAlreadyRead(
                     userId = it,
-                    callback = {
-                        booksAlreadyRead.value = it
-                        println(booksAlreadyRead.value)
-                    },
-                    errorCallback = { errorMessage.value = it.message }
-                )
-            }
-        }
-    }
-
-    fun getBooksAlreadyReadByQuery(query: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            authenticationRepository.getUserUid()?.let {
-                realtimeDatabaseRepository.getBooksAlreadyReadByQuery(
-                    userId = it,
-                    query = query,
                     callback = {
                         booksAlreadyRead.value = it
                         println(booksAlreadyRead.value)

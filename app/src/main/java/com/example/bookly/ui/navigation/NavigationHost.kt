@@ -10,6 +10,7 @@ import com.example.bookly.ui.authentication.Registration
 import com.example.bookly.ui.launch.Launch
 import com.example.bookly.ui.main.BookDetails
 import com.example.bookly.ui.main.BookList
+import com.example.bookly.ui.settings.Settings
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -54,9 +55,10 @@ internal fun NavigationHost(
         composable(
             route = NavigationRoutes.BookList.route
         ) {
-            BookList {
-                navController.navigate("${NavigationRoutes.BookDetails.route}/bookId=${it}")
-            }
+            BookList(
+                navigateToBookDetails = { navController.navigate("${NavigationRoutes.BookDetails.route}/bookId=${it}") },
+                navigateToSetting = { navController.navigate(NavigationRoutes.Settings.route) }
+            )
         }
 
         composable(
@@ -70,6 +72,15 @@ internal fun NavigationHost(
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }
+        }
+
+        composable(
+            route = NavigationRoutes.Settings.route
+        ) {
+            Settings(
+                navigateToPreviousScreen = { navController.popBackStack() },
+                navigateToLogin = { navController.navigate(NavigationRoutes.Login.route) }
+            )
         }
     }
 }

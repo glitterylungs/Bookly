@@ -5,6 +5,7 @@ import com.example.bookly.ui.authentication.LoginViewModel
 import com.example.bookly.ui.authentication.RegistrationViewModel
 import com.example.bookly.ui.main.BookDetailsViewModel
 import com.example.bookly.ui.main.BookListViewModel
+import com.example.bookly.ui.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -32,7 +33,8 @@ internal val viewModelModule = module {
         BookListViewModel(
             authenticationRepository = get(),
             realtimeDatabaseRepository = get(),
-            bookRepository = get()
+            bookRepository = get(),
+            sharedPreferencesManager = get()
         )
     }
 
@@ -41,6 +43,13 @@ internal val viewModelModule = module {
             authenticationRepository = get(),
             bookRepository = get(),
             realtimeDatabaseRepository = get()
+        )
+    }
+
+    viewModel {
+        SettingsViewModel(
+            sharedPreferencesManager = get(),
+            authenticationRepository = get()
         )
     }
 }

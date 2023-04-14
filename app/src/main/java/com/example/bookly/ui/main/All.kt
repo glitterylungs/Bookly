@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
@@ -22,12 +23,15 @@ internal fun All(
     navigateToBookDetails: (String) -> Unit
 ) {
     val allBooks by remember { viewModel.allBooks }
+    val isLargeViewEnabled by remember { viewModel.isLargeViewEnabled }.collectAsState()
 
     LaunchedEffect(true) {
         viewModel.getBooks("harry potter")
+        viewModel.updatePreferences()
     }
+
     LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),
+        columns = StaggeredGridCells.Fixed(if (isLargeViewEnabled) 1 else 2),
         modifier = Modifier
             .fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
@@ -36,7 +40,11 @@ internal fun All(
     ) {
         items(allBooks) { item ->
             if (item.volumeInfo?.imageLinks?.thumbnail != null) {
-                BookCard(book = item, onClick = navigateToBookDetails)
+                BookCard(
+                    book = item,
+                    onClick = navigateToBookDetails,
+                    isLargeViewEnabled = isLargeViewEnabled
+                )
             }
         }
     }

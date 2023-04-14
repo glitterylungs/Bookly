@@ -17,41 +17,32 @@ internal class RealtimeDatabaseRepositoryImpl(
     override fun deleteBookToRead(userId: String, bookId: String) =
         database.reference.child("users").child(userId).child("toRead").child(bookId).removeValue()
 
+    override fun checkIfBookToReadExists(
+        userId: String,
+        bookId: String,
+        callback: (Boolean) -> Unit,
+        errorCallback: (DatabaseError) -> Unit
+    ) {
+        database.reference.child("users").child(userId).child("toRead").child(bookId)
+            .addListenerForSingleValueEvent(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        callback(snapshot.exists())
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        callback(false)
+                    }
+                }
+            )
+    }
+
     override fun getBooksToRead(
         userId: String,
         callback: (List<Item>) -> Unit,
         errorCallback: (DatabaseError) -> Unit
     ) {
         database.reference.child("users").child(userId).child("toRead")
-            .addValueEventListener(
-                object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val books: MutableList<Item> = mutableListOf()
-                        snapshot.children.forEach {
-                            it.getValue(Item::class.java)?.let { book ->
-                                books.add(book)
-                            }
-                        }
-                        callback(books)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        errorCallback(error)
-                    }
-                }
-            )
-    }
-
-    override fun getBooksToReadByQuery(
-        userId: String,
-        query: String,
-        callback: (List<Item>) -> Unit,
-        errorCallback: (DatabaseError) -> Unit
-    ) {
-
-        database.reference.child("users").child(userId).child("toRead").orderByChild("title")
-            .startAt(query)
-            .endAt(query + "\uf8ff")
             .addValueEventListener(
                 object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -79,6 +70,26 @@ internal class RealtimeDatabaseRepositoryImpl(
         database.reference.child("users").child(userId).child("alreadyRead").child(bookId)
             .removeValue()
 
+    override fun checkIfBookAlreadyReadExists(
+        userId: String,
+        bookId: String,
+        callback: (Boolean) -> Unit,
+        errorCallback: (DatabaseError) -> Unit
+    ) {
+        database.reference.child("users").child(userId).child("alreadyRead").child(bookId)
+            .addListenerForSingleValueEvent(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        callback(snapshot.exists())
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        callback(false)
+                    }
+                }
+            )
+    }
+
     override fun getBooksAlreadyRead(
         userId: String,
         callback: (List<Item>) -> Unit,
@@ -101,33 +112,5 @@ internal class RealtimeDatabaseRepositoryImpl(
                 }
             }
         )
-    }
-
-    override fun getBooksAlreadyReadByQuery(
-        userId: String,
-        query: String,
-        callback: (List<Item>) -> Unit,
-        errorCallback: (DatabaseError) -> Unit
-    ) {
-        database.reference.child("users").child(userId).child("alreadyRead").orderByChild("title")
-            .startAt(query)
-            .endAt(query + "\uf8ff")
-            .addValueEventListener(
-                object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val books: MutableList<Item> = mutableListOf()
-                        snapshot.children.forEach {
-                            it.getValue(Item::class.java)?.let { book ->
-                                books.add(book)
-                            }
-                        }
-                        callback(books)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        errorCallback(error)
-                    }
-                }
-            )
     }
 }

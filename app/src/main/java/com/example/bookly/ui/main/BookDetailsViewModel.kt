@@ -75,6 +75,8 @@ internal class BookDetailsViewModel(
     fun getBookById(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             book.value = bookRepository.getBookById(id)
+            checkIfBookToReadExists(id)
+            checkIfBookAlreadyReadExists(id)
         }
     }
 
@@ -107,6 +109,23 @@ internal class BookDetailsViewModel(
         }
     }
 
+    private fun checkIfBookToReadExists(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            authenticationRepository.getUserUid()?.let {
+                realtimeDatabaseRepository.checkIfBookToReadExists(
+                    userId = it,
+                    bookId = id,
+                    callback = {
+                        isBookToReadChecked.value = it
+                    },
+                    errorCallback = {
+                        errorMessage.value = it.message
+                    }
+                )
+            }
+        }
+    }
+
     private fun addBookAlreadyRead() {
         viewModelScope.launch(Dispatchers.IO) {
             authenticationRepository.getUserUid()?.let {
@@ -133,6 +152,23 @@ internal class BookDetailsViewModel(
                         errorMessage.value = exception.message
                     }
             } ?: run { errorMessage.value = "No such user" }
+        }
+    }
+
+    private fun checkIfBookAlreadyReadExists(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            authenticationRepository.getUserUid()?.let {
+                realtimeDatabaseRepository.checkIfBookAlreadyReadExists(
+                    userId = it,
+                    bookId = id,
+                    callback = {
+                        isBookAlreadyReadChecked.value = it
+                    },
+                    errorCallback = {
+                        errorMessage.value = it.message
+                    }
+                )
+            }
         }
     }
 }
