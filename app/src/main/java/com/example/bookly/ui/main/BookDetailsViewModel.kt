@@ -56,7 +56,7 @@ internal class BookDetailsViewModel(
         isBookToReadChecked.value = isChecked
 
         if (isChecked) {
-            addBookToRead()
+            addBook(TO_READ)
         } else {
             deleteBookToRead()
         }
@@ -66,7 +66,7 @@ internal class BookDetailsViewModel(
         isBookAlreadyReadChecked.value = isChecked
 
         if (isChecked) {
-            addBookAlreadyRead()
+            addBook(category = ALREADY_READ)
         } else {
             deleteBookAlreadyRead()
         }
@@ -80,10 +80,10 @@ internal class BookDetailsViewModel(
         }
     }
 
-    private fun addBookToRead() {
+    private fun addBook(category: String) {
         viewModelScope.launch(Dispatchers.IO) {
             authenticationRepository.getUserUid()?.let {
-                realtimeDatabaseRepository.addBookToRead(it, book.value)
+                realtimeDatabaseRepository.addBook(it, category, book.value)
                     .addOnSuccessListener {
                         isSuccessful.value = true
                     }
@@ -126,21 +126,6 @@ internal class BookDetailsViewModel(
         }
     }
 
-    private fun addBookAlreadyRead() {
-        viewModelScope.launch(Dispatchers.IO) {
-            authenticationRepository.getUserUid()?.let {
-                realtimeDatabaseRepository.addBookAlreadyRead(it, book.value)
-                    .addOnSuccessListener {
-                        isSuccessful.value = true
-                    }
-                    .addOnFailureListener { exception ->
-                        errorMessage.value = exception.message
-                        println(exception.message)
-                    }
-            } ?: run { errorMessage.value = "No such user" }
-        }
-    }
-
     private fun deleteBookAlreadyRead() {
         viewModelScope.launch(Dispatchers.IO) {
             authenticationRepository.getUserUid()?.let {
@@ -170,5 +155,10 @@ internal class BookDetailsViewModel(
                 )
             }
         }
+    }
+
+    companion object {
+        private const val TO_READ = "toRead"
+        private const val ALREADY_READ = "alreadyRead"
     }
 }

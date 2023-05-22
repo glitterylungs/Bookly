@@ -1,5 +1,6 @@
 package com.example.bookly.di
 
+import com.example.bookly.BuildConfig
 import com.example.bookly.api.service.BookService
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -12,7 +13,7 @@ val networkModule = module {
     }
 
     single {
-        retrofitBuilder(get(), "https://www.googleapis.com/books/v1/")
+        retrofitBuilder(get(), BuildConfig.BOOKS_BASE_URL)
     }
 
     single<BookService> {

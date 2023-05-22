@@ -27,7 +27,7 @@ internal val repositoryModule = module {
 
     single<BookRepository> {
         BookRepositoryImpl(
-            bookService = get(),
+            bookService = get()
         )
     }
 }

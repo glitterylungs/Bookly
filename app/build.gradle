@@ -25,7 +25,7 @@ android {
 
         buildConfigField "String", "API_KEY", "\"${properties.getProperty("API_KEY")}\""
         buildConfigField "String", "FIREBASE_DATABASE", "\"${properties.getProperty("FIREBASE_DATABASE")}\""
-
+        buildConfigField "String", "BOOKS_BASE_URL", "\"${properties.getProperty("BOOKS_BASE_URL")}\""
     }
 
     buildTypes {
